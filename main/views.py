@@ -52,7 +52,7 @@ def get_file_map(bucket_name, suffix, prefix):
             encoded_filenmae = urllib.quote_plus(filename.encode('utf8'))
             try:
                 if filetype == 'pdf':
-                    mdata = FileMetadata.objects.using('default').filter(filename=filename, sfid=sfid, loanid=loan_sfid).order_by('creation_date').last()
+                    mdata = FileMetadata.objects.using('default').filter(filename=filename).order_by('creation_date').last()
                     metadata_lst.append([['Producer', mdata.producer],['Creator', mdata.creator], ['File Creation Date', mdata.file_creation_date],
                         ['File Modified Date', mdata.file_mod_date], ['Title', mdata.title], ['Other Information', mdata.other_info]])
                 else:
@@ -103,8 +103,7 @@ def pull_one_file_metadata(request, bucket_name, s3, filename, prefix):
 
     new_metadata = FileMetadata(producer=info_list[0], creator=info_list[1], file_creation_date=info_list[2],
                     file_mod_date=info_list[3], title=info_list[4], other_info=info_list[5], filename=filename,
-                    sfid=request.GET.get('sfid'), loanid=request.GET.get('loanid'), creation_user=request.user,
-                    creation_date=timezone.now()) # change this
+                    creation_user=request.user, creation_date=timezone.now())
 
     new_metadata.save()
     os.remove('file.pdf')

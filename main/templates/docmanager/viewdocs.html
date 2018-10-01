@@ -1,0 +1,59 @@
+<link href="{% static '/css/file_upload.css' %}" rel="stylesheet">
+<link href="{% static '/css/viewdocs.css' %}" rel="stylesheet">
+<script src="{% static '/javascripts/dropzone/dropzone.js' %}"></script>
+<div>
+  {% include "/uploadfiles.html" %}
+
+  <a class="btn pull-right" href="pull_file_metadata?" style="margin-right: 50px;">Pull All File Metadata</a>
+  <input class="btn btn-primary pull-right" id="btnHide" type="button" style="margin-right: 20px;" value="Toggle File Metadata"/>
+
+  <div id="docs-privateDiv">
+    <br>
+    <div class="col-md-12">
+      <table id="private">
+        <tr>
+          <th>File Name</th>
+          <th>File Type</th>
+          <th>Date Uploaded</th>
+          <th>File Size</th>
+          <th>View</th>
+          <th>Download</th>
+          <th id="columnHide">Metadata</th>
+        </tr>
+        {% for file in private_filemap %}
+          <tr>
+            <td><a style="color: #9d74b0;" href="document?" target="_blank">{{ file.0 }}</a></td>
+            <td>{{ file.2 }}</td>
+            <td>{{ file.3 }}</td>
+            <td>{{ file.4 }}</td>
+            <td><a class="btn btn-primary" href="document?" target="_blank">View</a></td>
+            <td><a class="btn btn-primary" href="document?">Download</a></td>
+              {% if file.1|is_string %}
+                <td>{{ file.1 }}</td>
+              {% elif not file.1 %}
+                <td><a class="btn btn-primary" href="pull_file_metadata?">Pull</a></td>
+              {% else %}
+                <td>
+                  <a class="btn btn-primary" ng-href="" data-toggle="popover" data-placement="left"><span class="badge"></span>View</a>
+                  <div id="primary_file_popover">
+                    <table>
+                      {% for data in file.1.0 %}  
+                        <tr>
+                          <td>{{ data.0 }}</td>
+                          <td>{{ data.1 }}</td>
+                        </tr>
+                      {% endfor %}   
+                    </table>
+                  </div>
+                </td>
+              {% endif %}
+          </tr>
+        {% endfor %}
+      </table>           
+    </div>
+  </div>   
+  
+</div> 
+
+<script src="{% static '/javascripts/viewdocs.js' %}"></script>
+<script src="{% static '/javascripts/file_upload.js' %}"></script>

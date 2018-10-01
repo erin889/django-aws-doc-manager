@@ -1,0 +1,10 @@
+td {
+  overflow:hidden;
+}
+.popover {
+   max-width: none;
+}
+#primary_file_popover {
+    display: none;
+    float: right;
+}
